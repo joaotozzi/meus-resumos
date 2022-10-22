@@ -7,21 +7,26 @@ Dependências:
 
 ## 1) API Rest
 
-### Anotações para classes controller
-- @RestController
-- @RequestMapping("/")
+### Anotações na classe controller
 
-### Anotações para métodos de um controller
+```java
+@RestController
+@RequestMapping("/")
+public class RestController(){}
+```
+### Anotações nos métodos da classe controller
 
+```java
 @RequestMapping(value = "/coffees", method = RequestMethod.GET)
+```
 
-Consultar recursos:
+Consultar um recurso (GET):
 ```java
  @GetMapping("/coffees/{id}") 
  Optional<Coffee> getCoffeeById(@PathVariable String id) {} 
 ```
 
-Criar recursos:
+Criar um recurso (POST):
 ```java
 @PostMapping("/coffees)
 ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {
@@ -30,8 +35,8 @@ ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {
 }
 ```
 
-Atualizar recursos existentes, com URIs conhecidas.
-Se o recurso não existir, ele deve ser criado:
+Atualizar um recurso com URI conhecido (PUT):
+Se existir um recurso com o id especificado, atualiza. Senão cria o recurso
 ```java
 @PutMapping("/coffees/{id}")
 ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {
@@ -40,19 +45,19 @@ ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee co
 }
 ```
 
-Excluir um recurso:
+Apagar um recurso (DELETE):
 ```java
 @DeleteMapping("/coffees/{id}")
 void deleteCoffee(@PathVariable String id){}
 ```
 
-## 2) Acesso a Banco de Dados
+## 2) Acesso a banco de dados
 
-Dependências: 
+Dependencies: 
 - spring-boot-starter-data-jpa (org.springframework.boot)
-- driver do banco de dados. Ex.: h2 (com.h2database)
+- Database driver. Ex.: h2 (com.h2database)
 
-### Mapeando as tabelas do BD
+### Mapeando um tabela para uma classe
 
 ```java
 @Entity
@@ -61,35 +66,91 @@ class Coffee{
 	@Id
 	private String id;
 	
-	//outras colunas...
+	//other columns...
 	
-	//necessita de um contrutor sem argumentos, getters e setters
+	//getters and setters
 }
 ```
 
-### Interfaces Repository
-Declaração da interface repository
-<Objeto que mapeia a tabela, tipo da chave primária>
+### Interface Repository
+Declarando uma interface repository (já vem com vários métodos implementados)
+<classe da entidade, tipo do id>
 ```java
 interface CoffeeRepository extends CrudRepository<Coffee, String> {}
 ```
 
-Injetando a dependência no controller:
+Injeção de dependência no Controller:
 ```java
 @RestController
-class NomeDoController{
+class RestController{
 	private final CoffeeRepository coffeeRepository;
 	
-	public NomeDoController(CoffeeRepository coffeeRepository) {
+	public RestController(CoffeeRepository coffeeRepository) {
 		this.coffeeRepository = coffeeRepository;
 	}
 	
-	//métodos do controller...
+	//Controller Methods...
 }
 ```
 
-Alguns métodos existentes:
+Alguns métodos já existentes na interface repository:
 - coffeeRepository.findAll()
 - coffeeRepository.findById(id)
 - coffeeRepository.save(coffee)
 - coffeeRepository.deleteById(id)
+
+## 3) Acessando propriedades definidas no arquivo application.properties
+
+### @Value
+
+application.properties
+```java
+greeting-name=Mariane
+greeting-coffee=${greeting-name} is drinking Café Cereza 
+```
+
+Lendo uma propriedade (o valor padrão é opcional)
+```java
+@Value("${greeting-name: Peter}")
+private String name;
+```
+
+### @ConfigurationProperties
+
+application.properties
+```java
+greeting.name=Mariane
+greeting.coffee=${greeting.name} is drinking Cafe Cereza
+```
+
+Classe de configuração que lê todas as propriedades que iniciam com o prefixo definido
+```java
+@Configuration
+@ConfigurationProperties(prefix = "greeting")
+public class Greeting {
+	private String name;
+	private String coffee;
+	
+	//getters and setters
+}
+```
+
+Para usar as propriedades, basta injetar a classe de configuração:
+```java
+@RestController
+@RequestMapping("/greeting")
+public class GreetingController {
+
+	private final Greeting greeting;
+
+	public GreetingController(Greeting greeting){
+		this.greeting = greeting;
+	}
+
+	@GetMapping
+	String getGreeting() {
+		return greeting.getName();
+	}
+}
+```
+
