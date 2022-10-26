@@ -2,7 +2,7 @@
 
 Spring initializr (https://start.spring.io/)
 
-Dependências:
+Dependências básicas:
 - Spring Web
 
 ## 1) API Rest
@@ -35,8 +35,8 @@ ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {
 }
 ```
 
-Atualizar um recurso com URI conhecido (PUT):
-Se existir um recurso com o id especificado, atualiza. Senão cria o recurso
+Atualizar um recurso com URI conhecido (PUT).
+Se existir um recurso com o id especificado, atualiza, senão cria o recurso:
 ```java
 @PutMapping("/coffees/{id}")
 ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {
@@ -53,9 +53,9 @@ void deleteCoffee(@PathVariable String id){}
 
 ## 2) Acesso a banco de dados
 
-Dependencies: 
+Dependências: 
 - spring-boot-starter-data-jpa (org.springframework.boot)
-- Database driver. Ex.: h2 (com.h2database)
+- Driver do banco de dados. Ex.: h2 (com.h2database)
 
 ### Mapeando um tabela para uma classe
 
