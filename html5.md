@@ -2,7 +2,7 @@
 
 ## 1) Estrutura básica de uma página html
 
-O conteúdo que é exibido pelo navegador fica dentro da tag <body>
+O conteúdo que é exibido pelo navegador fica dentro da tag body
 ```html
 <!DOCTYPE html>
 <html>
@@ -18,7 +18,7 @@ O conteúdo que é exibido pelo navegador fica dentro da tag <body>
 
 ## 2) Tags de formatação do conteúdo da página (dentro da tag body)
 
-Título (de <h1> a <h6> por ordem de importância)
+Título (de h1 a h6 por ordem de importância)
 ```html
 <h1>Titulo</h1>
 ```
@@ -209,7 +209,7 @@ Aside - conteúdo além do conteúdo principal (uma barra lateral)
 </aside>
 ```
 
-### <figure> and <figcaption>
+### figure and figcaption
 ```html
 <figure>
   <img src="pic_trulli.jpg" alt="Trulli">
