@@ -7,11 +7,11 @@ O conteúdo que é exibido pelo navegador fica dentro da tag body
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Nome da página<title>
+  <meta charset="UTF-8">
+  <title>Nome da página<title>
 </head>
 <body>
-	<h1>Hello World</h1>
+  <h1>Hello World</h1>
 </body>
 </html>
 ```
@@ -111,11 +111,19 @@ Lista ordenada
 ## 5) Formulários
 
 Exemplo de formulário básico
-```
-<form action="/action_page.php" method="get">
-  <label for="nome">Nome completo:</label>
-  <input type="text" id="nome" name="nome">
-  <input type="submit" value="Submit">
+```html
+<form action="/pagina-processa-formulario" method="post">
+  <div>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome">
+  </div>
+  <div>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email">
+  </div>
+  <div>
+    <input type="submit" value="Enviar">
+  </div>
 </form>
 ```
 
@@ -131,9 +139,11 @@ Radio Buttons (compatilham o mesmo nome no atributo "name")
 ```html
   <input type="radio" id="html" name="fav_language" value="HTML">
   <label for="html">HTML</label><br>
+
   <input type="radio" id="css" name="fav_language" value="CSS">
   <label for="css">CSS</label><br>
-  <input type="radio" id="javascript" name="fav_language" value="JavaScript">
+
+  <input type="radio" id="javascript" name="fav_language" value="JavaScript">
   <label for="javascript">JavaScript</label>
 ```
 
