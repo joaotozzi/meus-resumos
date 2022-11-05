@@ -2,31 +2,30 @@
 
 Spring initializr (https://start.spring.io/)
 
-Dependências básicas:
-- Spring Web
+Dependência básica: Spring Web
 
 ## 1) API Rest
 
-### Anotações na classe controller
+### Classe controller
 
 ```java
 @RestController
 @RequestMapping("/")
 public class RestController(){}
 ```
-### Anotações nos métodos da classe controller
+### Métodos da classe controller
 
 ```java
 @RequestMapping(value = "/coffees", method = RequestMethod.GET)
 ```
 
-Consultar um recurso (GET):
+GET - Consultar um recurso:
 ```java
  @GetMapping("/coffees/{id}") 
  Optional<Coffee> getCoffeeById(@PathVariable String id) {} 
 ```
 
-Criar um recurso (POST):
+POST - Criar um recurso:
 ```java
 @PostMapping("/coffees)
 ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {
@@ -35,8 +34,7 @@ ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {
 }
 ```
 
-Atualizar um recurso com URI conhecido (PUT).
-Se existir um recurso com o id especificado, atualiza, senão cria o recurso:
+PUT - Atualizar um recurso com URI conhecido (se existir atualiza, senão cria):
 ```java
 @PutMapping("/coffees/{id}")
 ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {
@@ -45,19 +43,19 @@ ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee co
 }
 ```
 
-Apagar um recurso (DELETE):
+DELETE - Apagar um recurso:
 ```java
 @DeleteMapping("/coffees/{id}")
 void deleteCoffee(@PathVariable String id){}
 ```
 
-## 2) Acesso a banco de dados
+## 2) Banco de dados
 
 Dependências: 
 - spring-boot-starter-data-jpa (org.springframework.boot)
-- Driver do banco de dados. Ex.: h2 (com.h2database)
+- Driver do banco: h2 (com.h2database)
 
-### Mapeando um tabela para uma classe
+### Classe entidade (mapeia uma tabela do banco)
 
 ```java
 @Entity
@@ -72,8 +70,8 @@ class Coffee{
 }
 ```
 
-### Interface Repository
-Declarando uma interface repository (já vem com vários métodos implementados)
+### Repository
+Interface que já vem com vários métodos implementados
 <classe da entidade, tipo do id>
 ```java
 interface CoffeeRepository extends CrudRepository<Coffee, String> {}
@@ -99,14 +97,13 @@ Alguns métodos já existentes na interface repository:
 - coffeeRepository.save(coffee)
 - coffeeRepository.deleteById(id)
 
-## 3) Acessando propriedades definidas no arquivo application.properties
+## 3) Acessando informações do arquivo application.properties
 
 ### @Value
 
 application.properties
 ```java
 greeting-name=Mariane
-greeting-coffee=${greeting-name} is drinking Café Cereza 
 ```
 
 Lendo uma propriedade (o valor padrão é opcional)
