@@ -52,10 +52,10 @@ Outra opção de anotação para os métodos:
 @RequestMapping(value = "/coffees", method = RequestMethod.GET)
 ```
 
-### Anotações para acessar valores recebidos na requisição
-@PathVariable - acessa o valor passaddo na URL
-@RequestBody - acessa o body enviado na requisição
-@RequestParam - acessa o valor passado como parâmetro na requisição (após o "?" da URL)
+Anotações para acessar valores recebidos na requisição
+- @PathVariable - acessa o valor passaddo na URL
+- @RequestBody - acessa o body enviado na requisição
+- @RequestParam - acessa o valor passado como parâmetro na requisição (após o "?" da URL)
 
 
 ## 2) Response Entity
@@ -75,8 +75,7 @@ return ResponseEntity.notFound().build();
 
 
 ## 3) Padrão Data Transfer Object (DTO)
-Padrão arquitetural introduzido por Martin Fowler (livro EAA) 
-Uma classe que representa os dados recebidos/enviados pela api, para desacoplar da entidade que representa a tabela do banco de dados.
+Padrão arquitetural introduzido por Martin Fowler (livro EAA). Uma classe que representa os dados recebidos/enviados pela api, para desacoplar da entidade que representa a tabela do banco de dados.
 
 ```java
 @PostMapping
