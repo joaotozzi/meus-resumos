@@ -128,20 +128,6 @@ Interface que já vem com vários métodos implementados
 interface CoffeeRepository extends CrudRepository<Coffee, String> {}
 ```
 
-Injeção de dependência no Controller:
-```java
-@RestController
-class RestController{
-	private final CoffeeRepository coffeeRepository;
-	
-	public RestController(CoffeeRepository coffeeRepository) {
-		this.coffeeRepository = coffeeRepository;
-	}
-	
-	//Controller Methods...
-}
-```
-
 Alguns métodos já existentes na interface repository:
 - coffeeRepository.findAll()
 - coffeeRepository.findById(id)
