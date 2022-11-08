@@ -85,7 +85,7 @@ public ResponseEntity<UsuarioRespostaDTO> salvar(@RequestBody UsuarioDTO usuario
 }
 ```
 
-A conversão DTO -> Entidade deve ser feita em uma classe separa mapper ou converter.
+A conversão DTO -> Entidade deve ser feita em uma classe separada mapper ou converter.
 
 Converter uma lista de objetos em uma lista de DTOs:
 ```java
