@@ -62,7 +62,7 @@ Anotações para acessar valores recebidos na requisição:
 Objeto que representa o response HTTP completo (status code, headers e o body) que é retornado na requisição.
 
 ```java
-return new ResponseEntity<String>(coffee, HttpStatus.CREATED);
+return new ResponseEntity<>(coffee, HttpStatus.CREATED);
 ```
 
 ```java
