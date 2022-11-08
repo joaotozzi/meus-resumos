@@ -29,7 +29,7 @@ Encapsula o template, a lógica e o estilo em um único arquivo (extensão .vue)
 
 O componente principal da aplicação é o "App.vue"
 
-Estrutura básica de um componente
+Estrutura básica de um componente:
 ```html
 <template>
   <h1> Olá Mundo </h1>
@@ -56,7 +56,7 @@ Além de inserir a tag no template é necessário importar o componente e declar
 </template>
 
 <script>
-  import PrimeiroCompoente from '.src/components/PrimeiroCompoente.vue'
+  import PrimeiroComponente from '.src/components/PrimeiroComponente.vue'
   
   export default {
     name: 'App'

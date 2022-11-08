@@ -2,58 +2,107 @@
 
 Spring initializr (https://start.spring.io/)
 
-Dependência básica: Spring Web
+Dependências: 
+- Spring Web
+- Spring Data JPA
+- Driver do Banco de Dados (MySQL, Oracle...)
 
-## 1) API Rest
 
-### Classe controller
+## 1) Controller Rest
+
+### Anotações da classe controller
 
 ```java
 @RestController
 @RequestMapping("/")
-public class RestController(){}
+public class RestController(){
+
+	//métodos GET, POST, PUT, DELETE...
+
+}
 ```
 ### Métodos da classe controller
-
-```java
-@RequestMapping(value = "/coffees", method = RequestMethod.GET)
-```
 
 GET - Consultar um recurso:
 ```java
  @GetMapping("/coffees/{id}") 
- Optional<Coffee> getCoffeeById(@PathVariable String id) {} 
+ public Optional<Coffee> getCoffeeById(@PathVariable String id) {} 
 ```
 
 POST - Criar um recurso:
 ```java
 @PostMapping("/coffees)
-ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {
-	//...
-	return new ResponseEntity(coffee, HttpStatus.CREATED);
-}
+public ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {}
 ```
 
 PUT - Atualizar um recurso com URI conhecido (se existir atualiza, senão cria):
 ```java
 @PutMapping("/coffees/{id}")
-ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {
-	//...
-	return new ResponseEntity(coffee, HttpStatus.OK);
-}
+public ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {}
 ```
 
 DELETE - Apagar um recurso:
 ```java
 @DeleteMapping("/coffees/{id}")
-void deleteCoffee(@PathVariable String id){}
+public void deleteCoffee(@PathVariable String id){}
 ```
 
-## 2) Banco de dados
+Outra opção de anotação para os métodos:
+```java
+@RequestMapping(value = "/coffees", method = RequestMethod.GET)
+```
 
-Dependências: 
-- spring-boot-starter-data-jpa (org.springframework.boot)
-- Driver do banco: h2 (com.h2database)
+###Anotações para acessar valores recebidos na requisição
+@PathVariable - acessa o valor passaddo na URL
+@RequestBody - acessa o body enviado na requisição
+@RequestParam - acessa o valor passado como parâmetro na requisição (após o "?" da URL)
+
+
+## 2) Response Entity
+Objeto que representa o response HTTP completo (status code, headers e o body) que é retornado na requisição.
+
+```java
+return new ResponseEntity<String>(coffee, HttpStatus.CREATED);
+```
+
+```java
+return ResponseEntity.ok(coffee);
+```
+
+```java
+return ResponseEntity.notFound().build();
+```
+
+
+## 3) Padrão Data Transfer Object (DTO)
+Padrão arquitetural introduzido por Martin Fowler (livro EAA) 
+Uma classe que representa os dados recebidos/enviados pela api, para desacoplar da entidade que representa a tabela do banco de dados.
+
+```java
+@PostMapping
+public ResponseEntity<UsuarioRespostaDTO> salvar(@RequestBody UsuarioDTO usuarioDTO){
+	Usuario usuario = mapper.toUsuario(usuarioDTO);
+	//segue a lógica do método
+}
+```
+
+A conversão DTO -> Entidade deve ser feita em uma classe separa mapper ou converter.
+
+Converter uma lista de objetos em uma lista de DTOs:
+```java
+return usuarios.stream().map(mapper::toDto).collect(toList());
+``` 
+
+
+## 4) Banco de dados
+
+Propriedades necessárias no arquivo application.properties (banco MySQL)
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/nomedobanco
+spring.datasource.username=<usuario>
+spring.datasource.password=<senha>
+```
+
 
 ### Classe entidade (mapeia uma tabela do banco)
 
@@ -62,13 +111,16 @@ Dependências:
 class Coffee{
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
 	
-	//other columns...
+	//outras colunas...
 	
-	//getters and setters
+	//getters e setters
 }
 ```
+
+
 
 ### Repository
 Interface que já vem com vários métodos implementados
@@ -97,9 +149,36 @@ Alguns métodos já existentes na interface repository:
 - coffeeRepository.save(coffee)
 - coffeeRepository.deleteById(id)
 
-## 3) Acessando informações do arquivo application.properties
 
-### @Value
+## 5) Injeção de Dependências @Autowired
+Muito usado para injetar interfaces repository
+
+```java
+public class RestController{
+	@Autowired
+	private CoffeeRepository coffeeRepository;
+}
+```
+
+Injeção no construtor (não necessita da anotação @Autowired a partir do Spring 4.3):
+```java
+public class RestController{
+	private final CoffeeRepository coffeeRepository;
+
+	public RestController(CoffeeRepository coffeeRepository) {
+		this.coffeeRepository = coffeeRepository;
+	}
+}
+```
+
+## 6) Arquivo application.properties
+
+Apontando para uma variável de ambiente (externa ao código) e definindo um valor default
+```java
+server.port=${PORT:8080}
+```
+
+### Injetando propriedades com @Value
 
 application.properties
 ```java
@@ -112,7 +191,7 @@ Lendo uma propriedade (o valor padrão é opcional)
 private String name;
 ```
 
-### @ConfigurationProperties
+### Acessando informações com @ConfigurationProperties
 
 application.properties
 ```java
@@ -128,7 +207,7 @@ public class Greeting {
 	private String name;
 	private String coffee;
 	
-	//getters and setters
+	//getters e setters
 }
 ```
 
