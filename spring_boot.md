@@ -52,7 +52,7 @@ Outra opção de anotação para os métodos:
 @RequestMapping(value = "/coffees", method = RequestMethod.GET)
 ```
 
-Anotações para acessar valores recebidos na requisição
+Anotações para acessar valores recebidos na requisição:
 - @PathVariable - acessa o valor passaddo na URL
 - @RequestBody - acessa o body enviado na requisição
 - @RequestParam - acessa o valor passado como parâmetro na requisição (após o "?" da URL)
