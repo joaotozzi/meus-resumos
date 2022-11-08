@@ -31,17 +31,11 @@ O componente principal da aplicação é o "App.vue"
 
 Estrutura básica de um componente:
 ```html
-<template>
+<template></template>
 
-</template>
+<script></script>
 
-<script>
-
-</script>
-
-<style>
-
-</style>
+<style></style>
 ```
 
 Todo conteúdo do template deve estar envolvido em um única tag (div, por exemplo).
@@ -57,10 +51,10 @@ Além de inserir a tag no template é necessário importar o componente e declar
   import PrimeiroComponente from '.src/components/PrimeiroComponente.vue'
   
   export default {
-    name: 'App'
-	components: {
-	  PrimeiroComponente
-	}
+    name: 'App',
+    components: {
+       PrimeiroComponente
+    }
   }
 </script>
 ``` 
