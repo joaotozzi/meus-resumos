@@ -84,7 +84,7 @@ Fazer referência a um arquivo .js externo
 Incluindo código JS dentro do arquivo HTML
 ```html
 <script>
-	document.getElementById("demo").innerHTML = "Hello JavaScript!";
+    document.getElementById("demo").innerHTML = "Hello JavaScript!";
 </script>
 ```
 
@@ -166,16 +166,16 @@ Outros tipos:
 Section - um agrupamento temático de conteúdo, normalmente com um título (um capítulo, informação de contato...)
 ```html
 <section>
-	<h1>WWF</h1>
-	<p>The World Wide Fund for Nature (WWF) is an international organization working on issues regarding the conservation, research and restoration of the environment, formerly named the World Wildlife Fund. WWF was founded in 1961.</p>
+    <h1>WWF</h1>
+    <p>The World Wide Fund for Nature (WWF) is an international organization working on issues regarding the conservation, research and restoration of the environment, formerly named the World Wildlife Fund. WWF was founded in 1961.</p>
 </section>
 ```
 
 Article - um conteúdo independente e autocontido, que faz sentido por si só, e deve ser possível distribuí-lo independentemente do resto do site (posts de um blog, comentários)
 ```html
 <article>
-	<h2>Google Chrome</h2>
-	<p>Google Chrome is a web browser developed by Google, released in 2008. Chrome is the world's most popular web browser today!</p>
+    <h2>Google Chrome</h2>
+    <p>Google Chrome is a web browser developed by Google, released in 2008. Chrome is the world's most popular web browser today!</p>
 </article>
 ```
 
