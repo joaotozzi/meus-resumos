@@ -25,8 +25,8 @@ public class RestController(){
 
 GET - Consultar um recurso:
 ```java
- @GetMapping("/coffees/{id}") 
- public Optional<Coffee> getCoffeeById(@PathVariable String id) {} 
+@GetMapping("/coffees/{id}") 
+public Optional<Coffee> getCoffeeById(@PathVariable String id) {} 
 ```
 
 POST - Criar um recurso:
@@ -80,8 +80,8 @@ Padrão arquitetural introduzido por Martin Fowler (livro EAA). Uma classe que r
 ```java
 @PostMapping
 public ResponseEntity<UsuarioRespostaDTO> salvar(@RequestBody UsuarioDTO usuarioDTO){
-	Usuario usuario = mapper.toUsuario(usuarioDTO);
-	//segue a lógica do método
+    Usuario usuario = mapper.toUsuario(usuarioDTO);
+    //segue a lógica do método
 }
 ```
 
@@ -109,17 +109,15 @@ spring.datasource.password=<senha>
 @Entity
 class Coffee{
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private String id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private String id;
 	
-	//outras colunas...
+    //outras colunas...
 	
-	//getters e setters
+    //getters e setters
 }
 ```
-
-
 
 ### Repository
 Interface que já vem com vários métodos implementados
@@ -140,19 +138,19 @@ Muito usado para injetar interfaces repository
 
 ```java
 public class RestController{
-	@Autowired
-	private CoffeeRepository coffeeRepository;
+    @Autowired
+    private CoffeeRepository coffeeRepository;
 }
 ```
 
 Injeção no construtor (não necessita da anotação @Autowired a partir do Spring 4.3):
 ```java
 public class RestController{
-	private final CoffeeRepository coffeeRepository;
+    private final CoffeeRepository coffeeRepository;
 
-	public RestController(CoffeeRepository coffeeRepository) {
-		this.coffeeRepository = coffeeRepository;
-	}
+    public RestController(CoffeeRepository coffeeRepository) {
+        this.coffeeRepository = coffeeRepository;
+    }
 }
 ```
 
@@ -172,7 +170,7 @@ greeting-name=Mariane
 
 Lendo uma propriedade (o valor padrão é opcional)
 ```java
-@Value("${greeting-name: Peter}")
+@Value("${greeting-name: João}")
 private String name;
 ```
 
@@ -189,10 +187,10 @@ Classe de configuração que lê todas as propriedades que iniciam com o prefixo
 @Configuration
 @ConfigurationProperties(prefix = "greeting")
 public class Greeting {
-	private String name;
-	private String coffee;
+    private String name;
+    private String coffee;
 	
-	//getters e setters
+     //getters e setters
 }
 ```
 
@@ -202,16 +200,16 @@ Para usar as propriedades, basta injetar a classe de configuração:
 @RequestMapping("/greeting")
 public class GreetingController {
 
-	private final Greeting greeting;
+    private final Greeting greeting;
 
-	public GreetingController(Greeting greeting){
-		this.greeting = greeting;
-	}
+    public GreetingController(Greeting greeting){
+        this.greeting = greeting;
+    }
 
-	@GetMapping
-	String getGreeting() {
-		return greeting.getName();
-	}
+    @GetMapping
+    String getGreeting() {
+        return greeting.getName();
+    }
 }
 ```
 
