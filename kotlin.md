@@ -213,7 +213,7 @@ val resultado = somar(5, 7)
 ### Single-Expression Functions
 Função em uma linha. Não é preciso usar a palavre "return"
 ```kotlin
-fun somar(n1: Int, n2: Int)	= n1 + n2	
+fun somar(n1: Int, n2: Int) = n1 + n2	
 ```
 
 ## 8) Orientação a Objetos
