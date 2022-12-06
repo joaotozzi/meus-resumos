@@ -134,31 +134,31 @@ val x = arrayInt[2]
 ```
 Lista de tamanho mutável
 ```kotlin
-val	lista = mutableListOf(1,2,3,4)	
+val lista = mutableListOf(1,2,3,4)	
 lista.add(5)
 ```
 Lista com tamanho e valores imutáveis
 ```kotlin
-val	lista = listOf(1,2,3,4)
+val lista = listOf(1,2,3,4)
 ```
 
 ### Funções úteis de listas
 Retornar o primeiro elemento da lista
 ```kotlin
-val	item = lista.first()
+val item = lista.first()
 ```
 Retornar o último elemento da lista
 ```kotlin
-val	item = lista.last()
+val item = lista.last()
 ```
 Aplicar um filtro específico na lista
 ```kotlin
-val	numerosPares = lista.filter { it % 2 == 0 }
+val numerosPares = lista.filter { it % 2 == 0 }
 ```
 
 ## 5) Estruturas de decisão
 
-If
+If e Else
 ```kotlin
 if(senha == "123"){
     //conteúdo do if
@@ -166,7 +166,7 @@ if(senha == "123"){
     //conteúdo do else
 }
 ```
-When (para várias comparações em seguida. Equivalente ao switch do Java)
+When (Equivalente ao switch do Java)
 É possível verificar múltiplos valores ou até um intervalo de valores (in 1..10)
 ```kotlin
 when (x) {
@@ -178,14 +178,14 @@ when (x) {
 ## 6) Estruturas de repetição
 For
 ```kotlin
-val	lista =	listOf(1,2,3,4)
+val lista = listOf(1,2,3,4)
 for(i in lista)	{
     println("Item: $i")
 }
 ```
 For com índice e valor
 ```kotlin
-val	lista =	listOf(1,2,3,4)
+val lista = listOf(1,2,3,4)
 for((indice, valor) in lista.withIndex()){
     println("índice: $indice valor: $valor")
 }
@@ -193,7 +193,7 @@ for((indice, valor) in lista.withIndex()){
 
 While
 ```kotlin
-var	x = 0	
+var x = 0	
 while (x < 10) {
     println(x.toString())
     x++
@@ -207,13 +207,13 @@ fun somar(n1: Int, n2: Int): Int{
     return n1 + n2	
 }
 
-val	resultado = somar(5, 7)
+val resultado = somar(5, 7)
 ```
 
 ### Single-Expression Functions
 Função em uma linha. Não é preciso usar a palavre "return"
 ```kotlin
-fun	somar(n1: Int, n2: Int)	= n1 + n2	
+fun somar(n1: Int, n2: Int)	= n1 + n2	
 ```
 
 ## 8) Orientação a Objetos
@@ -221,18 +221,18 @@ fun	somar(n1: Int, n2: Int)	= n1 + n2
 ```kotlin
 class Carro {
     var cor: String = ""
-	var	modelo:String =	""
+    var modelo:String =	""
 	
     fun	acelerar(){
-	    println("Acelerando")
-	}
+        println("Acelerando")
+    }
 	
     fun	frear(){
         println("freando")
     }
 }
 
-val	c = Carro()
+val c = Carro()
 c.cor = "Azul"
 c.modelo = "Nissan 350z"
 c.acelerar()
