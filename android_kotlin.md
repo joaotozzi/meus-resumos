@@ -30,6 +30,16 @@ class MainActivity : Activity() {
 }
 ```
 
+Métodos de callback herdados da classe Activity:
+* onCreate
+* onStart
+* onResume
+* onPause
+* onStop
+* onRestart
+* onDestroy
+
+
 ### Exemplo de Activity - Arquivo XML
 Exemplo apenas com um componente TextView com o texto "Hello Kotlin"
 ```xml
@@ -41,14 +51,6 @@ Exemplo apenas com um componente TextView com o texto "Hello Kotlin"
     />
 ```
 
-Métodos de callback herdados da classe Activity:
-* onCreate
-* onStart
-* onResume
-* onPause
-* onStop
-* onRestart
-* onDestroy
 
 ## 2) Classe R
 Classe que facilita o acesso aos recursos do projeto
@@ -105,7 +107,7 @@ Pode ser definido como:
 ## 4) Layouts
 
 ### LinearLayout
-Agrupa os componentes dentro dele de forma linear, um ao lado do outro (na horizontal ou na vertical)
+Agrupa os componentes de forma linear, um ao lado do outro (na horizontal ou na vertical)
 ```xml
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
