@@ -10,22 +10,21 @@ Possui total interoperabilidade com Java (todos os códigos escritos em Java pod
 ## 1) Estrutura básica
 Não é obrigatório usar ";" ao final da linha.
 
-### Extensão do arquivo
-.kt
+Extensão do arquivo: .kt
 
-### Ponto de partida de um programa Kotlin (função main)
+Ponto de partida de um programa Kotlin (função main)
 ```kotlin
 fun main(args: Array<String>){
     //resto do código...
 }
 ```
 
-### Imprimir no console
+Imprimir no console
 ```kotlin
 println("Hello World!")
 ```
 
-### Comentários
+Comentários
 ```kotlin
 //comentário de uma linha
 
@@ -36,7 +35,7 @@ com várias linhas
 ```
 
 ## 2) Variáveis
-Declaração de variáveis usa a palavra-chave "var". É obrigatório que a variável tenha um valor inicial.
+A declaração de variáveis usa a palavra-chave "var". É obrigatório que a variável tenha um valor inicial.
 ```kotlin
 var idade:Int = 22
 ```
@@ -63,6 +62,7 @@ val pi = 3.1415926
 
 ### Proteção contra nulos (null safety)
 Por padrão, nenhuma variável ou objeto pode ter valor nulo.
+
 Ao adicionar o operador "?" a variável passa a aceitar valor nulo, mas o compilador obriga fazer validação antes de usá-la.
 ```kotlin
 var nomeUsuario :String? = null
@@ -124,7 +124,7 @@ val c3 = b1.not()
 ```
 
 ## 4) Listas e Arrays
-Definindo uma array (tamanho imutável)
+Array (tamanho imutável)
 ```kotlin
 val arrayInt :Array<Int> = arrayOf(1, 2, 3, 4)
 ```
@@ -167,11 +167,12 @@ if(senha == "123"){
 }
 ```
 When (Equivalente ao switch do Java)
+
 É possível verificar múltiplos valores ou até um intervalo de valores (in 1..10)
 ```kotlin
 when (x) {
     0, 1 -> print("x == 0 ou x == 1")
-	else ->	print("x tem outro valor")
+    else -> print("x tem outro valor")
 }
 ```
 
@@ -201,7 +202,9 @@ while (x < 10) {
 ```
 
 ## 7) Funções
-Utiliza a palavra-chave "fun". Para funções que não precisam de retorno, informar o retorno como "Unit" ou omitir o tipo de retorno.
+Utiliza a palavra-chave "fun". 
+
+Para funções que não precisam de retorno, informar o retorno como "Unit" ou omitir o tipo de retorno.
 ```kotlin
 fun somar(n1: Int, n2: Int): Int{
     return n1 + n2	
@@ -211,7 +214,7 @@ val resultado = somar(5, 7)
 ```
 
 ### Single-Expression Functions
-Função em uma linha. Não é preciso usar a palavre "return"
+Declaração de função em uma linha. Não é preciso usar a palavra "return"
 ```kotlin
 fun somar(n1: Int, n2: Int) = n1 + n2	
 ```
