@@ -29,7 +29,7 @@ Resumos de linguagens de programação e outras tecnologias
 * Docker
 * Jenkins
 
-## Padróes, arquitetura e boas práticas
+## Padrões, arquitetura e boas práticas
 * TDD
 * Design Patterns
 * Microsserviços
