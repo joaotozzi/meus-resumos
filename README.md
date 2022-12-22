@@ -16,6 +16,7 @@ Resumos de linguagens de programação e outras tecnologias
 * Spring Cloud - Ferramentas para sistemas distribuídos
 * [Kotlin](kotlin.md)
 * Python
+* Go
 
 ## Mobile
 * [Programação Android com Kotlin](android_kotlin.md)
@@ -30,6 +31,7 @@ Resumos de linguagens de programação e outras tecnologias
 * Jenkins
 
 ## Padrões, arquitetura e boas práticas
+* REST
 * TDD
 * Design Patterns
 * Microsserviços
