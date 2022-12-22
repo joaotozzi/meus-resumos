@@ -18,7 +18,7 @@ Resumos de linguagens de programação e outras tecnologias
 * Python
 
 ## Mobile
-* [Programação Android com Kotlin] (android_kotlin.md)
+* [Programação Android com Kotlin](android_kotlin.md)
 
 ## Banco de Dados
 * SQL
