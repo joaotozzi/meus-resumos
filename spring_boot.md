@@ -146,7 +146,7 @@ public class Configuracao {
 
 Converter Entity -> DTO:
 ```java
-modelMapper.map(p, PagamentoDto.class);
+modelMapper.map(pagamento, PagamentoDto.class);
 ```
 
 Converter DTO -> Entity:
