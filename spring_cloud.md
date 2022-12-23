@@ -13,7 +13,7 @@ Dependência:
 
 
 A anotação @EnableEurekaServer é necessária na classe principal da aplicação
-```
+```java
 @SpringBootApplication
 @EnableEurekaServer
 public class ServerApplication {
