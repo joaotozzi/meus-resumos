@@ -2,17 +2,15 @@
 
 O [Spring Cloud](https://spring.io/projects/spring-cloud) fornece várias ferramentas para implementação facilitada de alguns padrões comuns em sistemas distribuídos.
 
-## 1) Spring Cloud Netflix (Eureka)
+## 1) Spring Cloud Netflix
 
-### Service Discovery
+### Service Discovery (Eureka Server)
 Um catálogo com o endereço de todos os microsserviços registrados nele
-
-### Eureka Server
 
 Uma aplicação java (spring boot) simples. São necessárias apenas essas poucas configurações.
 
 Dependência:
-- Eureka Server (Spring Cloud Discovery)
+- spring-cloud-starter-netflix-eureka-server
 
 A anotação @EnableEurekaServer é necessária na classe principal da aplicação
 ```
@@ -107,7 +105,20 @@ spring.cloud.gateway.discovery.locator.LowerCaseServiceId=true
 
 Assim, bastar chamar a url e porta do gateway  + /{nome do microsserviço}/{endpoint} para acessar as outras apis.
 
+### Balanceamento de carga
+
+O gateway faz automaticamente o balanceamento de carga das requisições entre as instâncias do microsserviço que estiverem ativas
+
+É necessário adicionar no aplication.properties do microsserviço a informação do id da instância:
+```
+#nome do microsserviço
+spring.application.name=pagamentos-ms
+
+eureka.instance.instance-id=${spring.application.name}:${random.int}
+```
 
 ## 3) Spring Cloud OpenFeign
+
+
 
 ## 4) Tratamento de erros (Circuit Breaker e Fallback)
