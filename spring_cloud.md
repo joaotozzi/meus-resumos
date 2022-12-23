@@ -135,9 +135,9 @@ public class PagamentosApplication {
 }
 ```
 
-A configuração da requisição HTTP para a outra api é feita em uma interface, adicionando algumas anotações:
+Os métodos que representam as requisições HTTP ficam em uma interface com a anotação @FeignClient
 ```java
-//informar o nome do microsserviço que está sendo chamado como está definido na variável spring.application.name
+//informar o nome do microsserviço que está sendo chamado, como está definido na variável spring.application.name
 @FeignClient("pedidos-ms")
 public interface PedidoClient {
     //informa o tipo da requisição e o endpoint que deve ser chamado
@@ -159,20 +159,20 @@ pedido.atualizaPagamento(pagamento.get().getPedidoId());
 
 ## 4) Tratamento de erros (Circuit Breaker e Fallback)
 
-Padrão de projeto para tratar falhas na integração entre os serviços. As configurações são feitas no serviço cliente, que consome uma outra api.
+Padrão de projeto para tratar falhas na integração entre os serviços. As configurações são feitas no serviço cliente (que vai consumir uma outra api).
 
 ### Circuit Breaker (disjuntor)
 
 Tem três estados:
 - Closed: Quando tudo está funcionando normalmente.
-- Open: Se o número de falhas chegar a um limiar determinado, o Circuit Breaker não executa mais a chamada ao outro serviço e retorna um erro (ou executa o método fallback).
+- Open: Se o número de falhas chegar a um limiar determinado, o Circuit Breaker não executa mais a chamada ao outro serviço e retorna um erro (ou executa o método de fallback).
 - Half Open: Após um período definido, a aplicação testa se o problema original ainda ocorre. Se uma falha ocorrer, o estado é alternado para Open novamente. Se for bem-sucedido, volta ao normal (Closed).
 
 Dependências:
-	- resilience4j-spring-boot2
-	- spring-boot-starter-aop
+- resilience4j-spring-boot2
+- spring-boot-starter-aop
     
-O método do controller, que faz internamente a chamada a outra api, precisa ser anotada com @CircuitBreaker:
+O método do controller, que faz internamente a chamada a outra api, precisa ser anotado com @CircuitBreaker:
 ```java
 @PatchMapping("/{id}/confirmar")
 @CircuitBreaker(name = "atualizaPedido", fallbackMethod = "pagamentoAutorizadoComIntegracaoPendente")
