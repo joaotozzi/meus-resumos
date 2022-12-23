@@ -132,6 +132,8 @@ return usuarios.stream().map(mapper::toDto).collect(toList());
 
 A conversão automática entre DTO e entidade pode ser feita com a dependência ModelMapper
 
+Os nomes dos atributos devem ser os mesmos nas duas classes
+
 É necessário indicar para o Spring que o modelMapper é um bean, para poder injetá-lo como dependência na classe service
 ```java
 @Configuration
