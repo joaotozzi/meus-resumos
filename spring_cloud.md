@@ -49,9 +49,9 @@ A anotação @EnableEurekaClient é necessária na classe principal da aplicaç�
 ```java
 @SpringBootApplication
 @EnableEurekaClient
-public class ServerApplication {
+public class PagamentosApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ServerApplication.class, args);
+        SpringApplication.run(PagamentosApplication.class, args);
     }
 }
 ```
@@ -81,9 +81,9 @@ A anotação @EnableEurekaClient é necessária na classe principal da aplicaç�
 ```java
 @SpringBootApplication
 @EnableEurekaClient
-public class ServerApplication {
+public class GatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ServerApplication.class, args);
+        SpringApplication.run(GatewayApplication.class, args);
     }
 }
 ```
@@ -119,13 +119,14 @@ eureka.instance.instance-id=${spring.application.name}:${random.int}
 
 ## 3) Spring Cloud OpenFeign
 
-Um cliente http para fazer integrações de backend para backend através de anotações
+Um cliente HTTP para fazer integrações de backend para backend através de anotações
 
 Dependência:
 - spring-cloud-starter-openfeign
 
-Adicionar na classe principal a anotação @EnableFeignClients:
+É necessário adicionar na classe principal a anotação @EnableFeignClients:
 ```java
+@SpringBootApplication
 @EnableFeignClients
 public class PagamentosApplication {
     public static void main(String[] args) {
@@ -157,3 +158,59 @@ pedido.atualizaPagamento(pagamento.get().getPedidoId());
 
 
 ## 4) Tratamento de erros (Circuit Breaker e Fallback)
+
+Padrão de projeto para tratar falhas na integração entre os serviços. As configurações são feitas no serviço cliente, que consome uma outra api.
+
+### Circuit Breaker (disjuntor)
+
+Tem três estados:
+- Closed: Quando tudo está funcionando normalmente.
+- Open: Se o número de falhas chegar a um limiar determinado, o Circuit Breaker não executa mais a chamada ao outro serviço e retorna um erro (ou executa o método fallback).
+- Half Open: Após um período definido, a aplicação testa se o problema original ainda ocorre. Se uma falha ocorrer, o estado é alternado para Open novamente. Se for bem-sucedido, volta ao normal (Closed).
+
+Dependências:
+	- resilience4j-spring-boot2
+	- spring-boot-starter-aop
+    
+O método do controller, que faz internamente a chamada a outra api, precisa ser anotada com @CircuitBreaker:
+```java
+@PatchMapping("/{id}/confirmar")
+@CircuitBreaker(name = "atualizaPedido", fallbackMethod = "pagamentoAutorizadoComIntegracaoPendente")
+public void confirmarPagamento(@PathVariable @NotNull Long id){
+    service.confirmarPagamento(id);
+}
+```
+	
+Configurações necessárias no application.properties:
+```
+#define a quantidade de requisições necessárias para voltar ao estado Open/Closed
+resilience4j.circuitbreaker.instances.atualizaPedido.slidingWindowSize=3
+
+#mínimo de chamadas até o circuitbreaker entrar em ação
+resilience4j.circuitbreaker.instances.atualizaPedido.minimunNumberOfCalls=2
+
+#uma vez que o estado mudou para aberto, quanto tempo vai ficar em aberto
+resilience4j.circuitbreaker.instances.atualizaPedido.waitDurationInOpenState=50s 
+```
+
+### Fallback
+
+Em caso de falha e acionamento do Circuit Breaker, um método "plano B" pode ser chamado ao invés de apenas retornar um erro.
+
+O método de fallback é indicado na anotação @CircuitBreaker
+
+Esse método pode, por exemplo, deixar o registro em um estado pendente que depois pode ser resolvido de alguma forma.
+
+O método de fallback precisa ter o mesmo retorno e receber os mesmos parâmetros que o método do controller correspondente. Pode ser acrescentado um parâmetro adicional (Exception e) para caso o método de fallback não funcione.
+
+```java
+@PatchMapping("/{id}/confirmar")
+@CircuitBreaker(name = "atualizaPedido", fallbackMethod = "pagamentoAutorizadoComIntegracaoPendente")
+public void confirmarPagamento(@PathVariable @NotNull Long id){
+    service.confirmarPagamento(id);
+}
+
+public void pagamentoAutorizadoComIntegracaoPendente(Long id, Exception e){
+    service.alteraStatus(id);
+}
+```
