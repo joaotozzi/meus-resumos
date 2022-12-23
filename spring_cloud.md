@@ -109,7 +109,7 @@ Assim, bastar chamar a url e porta do gateway  + /{nome do microsserviço}/{endp
 
 O gateway faz automaticamente o balanceamento de carga das requisições entre as instâncias do microsserviço que estiverem ativas
 
-É necessário adicionar no aplication.properties do microsserviço a informação do id da instância:
+Para isso, é necessário adicionar no aplication.properties do microsserviço a informação do id da instância:
 ```
 #nome do microsserviço
 spring.application.name=pagamentos-ms
