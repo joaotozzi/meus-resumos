@@ -11,13 +11,13 @@ Dependências:
 - Validation
 - Flyway Migration: para controlar os scripts de migração de banco de dados
 
-## ) Formas de organização do código
+## 1) Formas de organização do código
 Por recurso: Um pacote para cada funcionalidade. Inclui as classes controller, DTO e repository no mesmo pacote.
 
 Por camada (Package by Layer): Agrupa models, controllers e DTOs em pacotes específicos.
 
 
-## ) Controller Rest
+## 2) Controller Rest
 
 ### Anotações da classe controller
 
@@ -86,7 +86,7 @@ public ResponseEntity<PagamentoDto> remover(@PathVariable @NotNull Long id) {
 
 Outra opção de anotação para os métodos:
 ```java
-@RequestMapping(value = "/coffees", method = RequestMethod.GET)
+@RequestMapping(value = "/pagamentos", method = RequestMethod.GET)
 ```
 
 Anotações para acessar valores recebidos na requisição:
@@ -95,7 +95,7 @@ Anotações para acessar valores recebidos na requisição:
 - @RequestParam - acessa o valor passado como parâmetro na requisição (após o "?" da URL)
 
 
-## ) Response Entity
+## 3) Response Entity
 Objeto que representa o response HTTP completo (status code, headers e o body) que é retornado na requisição.
 
 ```java
@@ -111,7 +111,7 @@ return ResponseEntity.notFound().build();
 ```
 
 
-## ) Padrão Data Transfer Object (DTO)
+## 4) Padrão Data Transfer Object (DTO)
 Padrão arquitetural introduzido por Martin Fowler (livro EAA). Uma classe que representa os dados recebidos/enviados pela api, para desacoplar da entidade que representa a tabela do banco de dados.
 
 ```java
@@ -128,9 +128,33 @@ Converter uma lista de objetos em uma lista de DTOs:
 ```java
 return usuarios.stream().map(mapper::toDto).collect(toList());
 ``` 
+### ModelMapper
 
+A conversão automática entre DTO e entidade pode ser feita com a dependência ModelMapper
 
-## ) Banco de dados (Model)
+É necessário indicar para o Spring que o modelMapper é um bean, para poder injetá-lo como dependência na classe service
+```java
+@Configuration
+public class Configuracao {
+
+    @Bean
+    public ModelMapper obterModelMapper() {
+        return new ModelMapper();
+    }
+}
+```
+
+Converter Entity -> DTO:
+```java
+modelMapper.map(p, PagamentoDto.class);
+```
+
+Converter DTO -> Entity:
+```java
+modelMapper.map(dto, Pagamento.class);
+```
+
+## 5) Banco de dados (Model)
 
 Propriedades necessárias no arquivo application.properties (banco MySQL)
 ```
@@ -202,7 +226,22 @@ Alguns métodos já existentes na interface repository:
 - coffeeRepository.deleteById(id)
 
 
-## ) Injeção de Dependências @Autowired
+### Migrations (Flyway)
+
+Migrations: Histórico de tudo que aconteceu na base de dados
+
+Os scripts devem ficar na pasta resources/db.migration
+
+Padrão de nomeclatura dos scripts:
+V{numero}__{nome_do_comando}.sql
+Ex.: V1__criar_tabela_pagamentos.sql
+
+Cada alteração do banco deve ser feita em um novo arquivo (nunca editar um script já existente)
+
+É criada uma tabela flyway_schema_history contendo o histórico de todos os scripts executados, para que o flyway não execute novamentes os scripts antigos a cada novo deploy 
+
+
+## 6) Injeção de Dependências @Autowired
 Muito usado para injetar interfaces repository e services
 
 ```java
@@ -223,13 +262,86 @@ public class RestController{
 }
 ```
 
-## ) Service
+## 7) Camada Service
 
-Classes usadas para que as regras de manipulação não fiquem no controller
+Classes usadas para que as regras de manipulação não fiquem no controller. Recebem a anotação @Service
+
+```java
+@Service
+public class PagamentoService {
+
+    @Autowired
+    private PagamentoRepositoy repository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private PedidoClient pedido;
+
+
+    public Page<PagamentoDto> obterTodos(Pageable paginacao) {
+        return repository
+                .findAll(paginacao)
+                .map(p -> modelMapper.map(p, PagamentoDto.class));
+    }
+
+    public PagamentoDto obterPorId(Long id) {
+        Pagamento pagamento = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException());
+
+        return modelMapper.map(pagamento, PagamentoDto.class);
+    }
+
+    public PagamentoDto criarPagamento(PagamentoDto dto) {
+        Pagamento pagamento = modelMapper.map(dto, Pagamento.class);
+        pagamento.setStatus(Status.CRIADO);
+        repository.save(pagamento);
+
+        return modelMapper.map(pagamento, PagamentoDto.class);
+    }
+
+    public PagamentoDto atualizarPagamento(Long id, PagamentoDto dto) {
+        Pagamento pagamento = modelMapper.map(dto, Pagamento.class);
+        pagamento.setId(id);
+        pagamento = repository.save(pagamento);
+        return modelMapper.map(pagamento, PagamentoDto.class);
+    }
+
+    public void excluirPagamento(Long id) {
+        repository.deleteById(id);
+    }
+
+    public void confirmarPagamento(Long id){
+        Optional<Pagamento> pagamento = repository.findById(id);
+
+        if (!pagamento.isPresent()) {
+            throw new EntityNotFoundException();
+        }
+
+        pagamento.get().setStatus(Status.CONFIRMADO);
+        repository.save(pagamento.get());
+        pedido.atualizaPagamento(pagamento.get().getPedidoId());
+    }
+
+
+    public void alteraStatus(Long id) {
+        Optional<Pagamento> pagamento = repository.findById(id);
+
+        if (!pagamento.isPresent()) {
+            throw new EntityNotFoundException();
+        }
+
+        pagamento.get().setStatus(Status.CONFIRMADO_SEM_INTEGRACAO);
+        repository.save(pagamento.get());
+
+    }
+}
+```
 
 
 
-## ) Arquivo application.properties
+## 8) Arquivo application.properties
 
 Apontando para uma variável de ambiente (externa ao código) e definindo um valor default
 ```java
