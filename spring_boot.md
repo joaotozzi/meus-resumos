@@ -154,7 +154,7 @@ Converter DTO -> Entity:
 modelMapper.map(dto, Pagamento.class);
 ```
 
-## 5) Banco de dados (Model)
+## 5) Banco de dados
 
 Propriedades necessárias no arquivo application.properties (banco MySQL)
 ```
@@ -228,6 +228,8 @@ Alguns métodos já existentes na interface repository:
 
 ### Migrations (Flyway)
 
+Flyway é uma ferramenta para atualizar o banco de dados sem a necessidade de executar os scripts sql manualmente.
+
 Migrations: Histórico de tudo que aconteceu na base de dados
 
 Os scripts devem ficar na pasta resources/db.migration
@@ -276,10 +278,6 @@ public class PagamentoService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private PedidoClient pedido;
-
-
     public Page<PagamentoDto> obterTodos(Pageable paginacao) {
         return repository
                 .findAll(paginacao)
@@ -311,35 +309,8 @@ public class PagamentoService {
     public void excluirPagamento(Long id) {
         repository.deleteById(id);
     }
-
-    public void confirmarPagamento(Long id){
-        Optional<Pagamento> pagamento = repository.findById(id);
-
-        if (!pagamento.isPresent()) {
-            throw new EntityNotFoundException();
-        }
-
-        pagamento.get().setStatus(Status.CONFIRMADO);
-        repository.save(pagamento.get());
-        pedido.atualizaPagamento(pagamento.get().getPedidoId());
-    }
-
-
-    public void alteraStatus(Long id) {
-        Optional<Pagamento> pagamento = repository.findById(id);
-
-        if (!pagamento.isPresent()) {
-            throw new EntityNotFoundException();
-        }
-
-        pagamento.get().setStatus(Status.CONFIRMADO_SEM_INTEGRACAO);
-        repository.save(pagamento.get());
-
-    }
 }
 ```
-
-
 
 ## 8) Arquivo application.properties
 
