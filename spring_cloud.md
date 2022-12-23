@@ -73,7 +73,7 @@ Cada vez que uma instância do microsserviço é iniciada, o Eureka indica uma p
 
 Centraliza o acesso aos diversos microsserviços da aplicação (mas pode se tornar um ponto de falha)
 
-Criar um projeto Spring Boot com as dependências:
+Uma aplicação java (Spring Boot) com as dependências:
 - spring-cloud-starter-gateway
 - spring-cloud-starter-netflix-eureka-client
 
