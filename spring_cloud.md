@@ -5,12 +5,12 @@ O [Spring Cloud](https://spring.io/projects/spring-cloud) fornece várias ferram
 ## 1) Spring Cloud Netflix
 
 ### Service Discovery (Eureka Server)
-Um catálogo com o endereço de todos os microsserviços registrados nele
-
-Uma aplicação java (spring boot) simples. São necessárias apenas essas poucas configurações.
+Um catálogo com o endereço de todos os microsserviços registrados nele. 
+É uma aplicação java (spring boot) simples, apenas com essas poucas configurações.
 
 Dependência:
 - spring-cloud-starter-netflix-eureka-server
+
 
 A anotação @EnableEurekaServer é necessária na classe principal da aplicação
 ```
