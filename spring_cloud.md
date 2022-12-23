@@ -107,7 +107,7 @@ Assim, bastar chamar a url e porta do gateway  + /{nome do microsserviço}/{endp
 
 ### Balanceamento de carga
 
-O gateway faz automaticamente o balanceamento de carga das requisições entre as instâncias do microsserviço que estiverem ativas
+O gateway faz automaticamente o balanceamento de carga das requisições entre as instâncias ativas de um mesmo microsserviço
 
 Para isso, é necessário adicionar no aplication.properties do microsserviço a informação do id da instância:
 ```
