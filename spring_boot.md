@@ -6,45 +6,82 @@ Dependências:
 - Spring Web
 - Spring Data JPA
 - Driver do Banco de Dados (MySQL, Oracle...)
+- Spring Boot Devtools: permite restart automático da aplicação durante o desenvolvimento
+- Lombok: para não ser necessário escrever getters, setters e construtores
+- Validation
+- Flyway Migration: para controlar os scripts de migração de banco de dados
+
+## ) Formas de organização do código
+Por recurso: Um pacote para cada funcionalidade. Inclui as classes controller, DTO e repository no mesmo pacote.
+
+Por camada (Package by Layer): Agrupa models, controllers e DTOs em pacotes específicos.
 
 
-## 1) Controller Rest
+## ) Controller Rest
 
 ### Anotações da classe controller
 
 ```java
 @RestController
-@RequestMapping("/")
-public class RestController(){
+@RequestMapping("/pagamentos")
+public class PagamentoController {
 
+    @Autowired
+    private PagamentoService service;
+    
     //métodos GET, POST, PUT, DELETE...
 
 }
 ```
 ### Métodos da classe controller
 
+A implentação das regras de negócio fica nos métodos na camada Service
+
+GET - Listar recursos com paginação:
+```java
+@GetMapping
+public Page<PagamentoDto> listar(@PageableDefault(size = 10) Pageable paginacao) {
+    return service.obterTodos(paginacao);
+}
+```
+
 GET - Consultar um recurso:
 ```java
-@GetMapping("/coffees/{id}") 
-public Optional<Coffee> getCoffeeById(@PathVariable String id) {} 
+@GetMapping("/{id}")
+public ResponseEntity<PagamentoDto> detalhar(@PathVariable @NotNull Long id) {
+    PagamentoDto dto = service.obterPorId(id);
+
+    return ResponseEntity.ok(dto);
+}
 ```
 
 POST - Criar um recurso:
 ```java
-@PostMapping("/coffees)
-public ResponseEntity<Coffee> postCoffee(@RequestBody Coffee coffee) {}
+@PostMapping
+public ResponseEntity<PagamentoDto> cadastrar(@RequestBody @Valid PagamentoDto dto, UriComponentsBuilder uriBuilder) {
+    PagamentoDto pagamento = service.criarPagamento(dto);
+    URI endereco = uriBuilder.path("/pagamentos/{id}").buildAndExpand(pagamento.getId()).toUri();
+
+    return ResponseEntity.created(endereco).body(pagamento);
+}
 ```
 
-PUT - Atualizar um recurso com URI conhecido (se existir atualiza, senão cria):
+PUT - Atualizar um recurso com URI conhecido:
 ```java
-@PutMapping("/coffees/{id}")
-public ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {}
+@PutMapping("/{id}")
+public ResponseEntity<PagamentoDto> atualizar(@PathVariable @NotNull Long id, @RequestBody @Valid PagamentoDto dto) {
+    PagamentoDto atualizado = service.atualizarPagamento(id, dto);
+    return ResponseEntity.ok(atualizado);
+}
 ```
 
 DELETE - Apagar um recurso:
 ```java
-@DeleteMapping("/coffees/{id}")
-public void deleteCoffee(@PathVariable String id){}
+@DeleteMapping("/{id}")
+public ResponseEntity<PagamentoDto> remover(@PathVariable @NotNull Long id) {
+    service.excluirPagamento(id);
+    return ResponseEntity.noContent().build();
+}
 ```
 
 Outra opção de anotação para os métodos:
@@ -58,7 +95,7 @@ Anotações para acessar valores recebidos na requisição:
 - @RequestParam - acessa o valor passado como parâmetro na requisição (após o "?" da URL)
 
 
-## 2) Response Entity
+## ) Response Entity
 Objeto que representa o response HTTP completo (status code, headers e o body) que é retornado na requisição.
 
 ```java
@@ -74,7 +111,7 @@ return ResponseEntity.notFound().build();
 ```
 
 
-## 3) Padrão Data Transfer Object (DTO)
+## ) Padrão Data Transfer Object (DTO)
 Padrão arquitetural introduzido por Martin Fowler (livro EAA). Uma classe que representa os dados recebidos/enviados pela api, para desacoplar da entidade que representa a tabela do banco de dados.
 
 ```java
@@ -93,7 +130,7 @@ return usuarios.stream().map(mapper::toDto).collect(toList());
 ``` 
 
 
-## 4) Banco de dados
+## ) Banco de dados (Model)
 
 Propriedades necessárias no arquivo application.properties (banco MySQL)
 ```
@@ -107,23 +144,55 @@ spring.datasource.password=<senha>
 
 ```java
 @Entity
-class Coffee{
-
+@Table(name = "pagamentos")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Pagamento {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private String id;
-	
-    //outras colunas...
-	
-    //getters e setters
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @Positive
+    private BigDecimal valor;
+
+    @NotBlank
+    @Size(max=100)
+    private String nome;
+
+    @NotBlank
+    @Size(max=19)
+    private String numero;
+
+    @NotBlank
+    @Size(max=7)
+    private String expiracao;
+
+    @NotBlank
+    @Size(min=3, max=3)
+    private String codigo;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @NotNull
+    private Long pedidoId;
+
+    @NotNull
+    private Long formaDePagamentoId;
 }
 ```
 
 ### Repository
-Interface que já vem com vários métodos implementados
+Interface que já vem com vários métodos implementados que facilitam a criação do CRUD básico 
+
 <classe da entidade, tipo do id>
+
 ```java
-interface CoffeeRepository extends CrudRepository<Coffee, String> {}
+public interface PagamentoRepositoy extends JpaRepository<Pagamento, Long> {}
 ```
 
 Alguns métodos já existentes na interface repository:
@@ -133,8 +202,8 @@ Alguns métodos já existentes na interface repository:
 - coffeeRepository.deleteById(id)
 
 
-## 5) Injeção de Dependências @Autowired
-Muito usado para injetar interfaces repository
+## ) Injeção de Dependências @Autowired
+Muito usado para injetar interfaces repository e services
 
 ```java
 public class RestController{
@@ -154,7 +223,13 @@ public class RestController{
 }
 ```
 
-## 6) Arquivo application.properties
+## ) Service
+
+Classes usadas para que as regras de manipulação não fiquem no controller
+
+
+
+## ) Arquivo application.properties
 
 Apontando para uma variável de ambiente (externa ao código) e definindo um valor default
 ```java
