@@ -38,7 +38,7 @@ spring.application.name=server
 eureka.client.serviceUrl.defaultZone=http://localhost:8081/eureka
 ```
 
-### Configuração nos microsserviços clientes
+### Configurações nos microsserviços clientes
 
 Configurações para incluir um microsserviço na listagem do service discovery
 
@@ -119,6 +119,41 @@ eureka.instance.instance-id=${spring.application.name}:${random.int}
 
 ## 3) Spring Cloud OpenFeign
 
+Um cliente http para fazer integrações de backend para backend através de anotações
+
+Dependência:
+- spring-cloud-starter-openfeign
+
+Adicionar na classe principal a anotação @EnableFeignClients:
+```java
+@EnableFeignClients
+public class PagamentosApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(PagamentosApplication.class, args);
+    }
+}
+```
+
+A configuração da requisição HTTP para a outra api é feita em uma interface, adicionando algumas anotações:
+```java
+//informar o nome do microsserviço que está sendo chamado como está definido na variável spring.application.name
+@FeignClient("pedidos-ms")
+public interface PedidoClient {
+    //informa o tipo da requisição e o endpoint que deve ser chamado
+    @RequestMapping(method = RequestMethod.PUT, value = "/pedidos/{id}/pago")
+    void atualizaPagamento(@PathVariable Long id);
+}
+```
+
+A interface pode ser injetada no service e o método pode ser usado para acessar o endpoint do outro microsserviço
+```java
+@Autowired
+private PedidoClient pedido;
+
+//...
+
+pedido.atualizaPagamento(pagamento.get().getPedidoId());
+```
 
 
 ## 4) Tratamento de erros (Circuit Breaker e Fallback)
