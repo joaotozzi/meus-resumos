@@ -261,6 +261,20 @@ Wrappers
 
 ## 6) Java 8
 
+Stream
+
+Optional
+
+Datas
+
+Default Methods
+
+Novos métodos. sort(comparator) e forEach(consumer)
+
+Lambda
+
+Method Reference
+
 ## 7) Concorrência e threads
 
 ```java
