@@ -9,7 +9,7 @@ IDEs:
 
 ## 1) Sintaxe básica
 
-Hello World em Java
+### Hello World em Java
 ```java
 class MeuPrograma {
     public static void main(String[] args) {
@@ -18,7 +18,7 @@ class MeuPrograma {
 }
 ```
 
-Comentários
+### Comentários
 ```java
 //comentário de uma linha
 
@@ -26,23 +26,23 @@ Comentários
 comentário de várias linhas
 */
 ```
-Imprimindo na tela
+### Imprimindo na tela
 ```java
 System.out.println("Bom dia " + nome);
 ```
 
-Pacotes e imports
+### Pacotes e imports
 ```java
-//definindo o pacote da classe
+//definindo o pacote da classe (tudo em letra minúscula)
 package br.com.nomedaempresa.nomedoprojeto.subpacote;
 
 //importando uma classe pública de outro pacote
-import java.util.ArrayList
+import java.util.ArrayList;
 
 //importando um pacote inteiro
 import java.util.*;
 ```
-Variáveis
+### Variáveis
 ```java
 //tipos primitivos principais
 int idade = 15;
@@ -55,7 +55,15 @@ String nome = "João";
 ```
 Existem também os tipos primitivos byte, short, long e float
 
-Array (tamanho fixo)
+### Casting
+```java
+int valor = (int) 3.14;
+```
+A conversão de valores para uma variável maior é feita implicitamente
+
+
+### Array
+O tamanho de um array é fixo, não pode ser alterado.
 ```java
 //declarando um array
 int[] valores = new int[5];
@@ -68,7 +76,60 @@ int tamanho = valores.lenght;
 ```
 ### Estruturas de decisão
 
+If e else
+```java
+if (idade > 18) {
+    //conteúdo do if
+}else{
+    //conteúdo do else
+}
+```
+
+Switch
+```java
+switch(valor) {
+  case 1:
+    //bloco de código
+    break;
+  case 2:
+    //bloco de código
+    break;
+  default:
+    //bloco de código
+}
+```
+
+Operador ternário
+
+(expressão) ? retornoVerdadeiro : retornoFalso;
+```java
+b = (a > 0) ? 1 : 2;
+```
+
 ### Estruturas de repetição
+
+While
+```java
+int i = 0;
+while (i < 5) {
+  //bloco de código
+  i++;
+}
+```
+
+For
+```java
+for (int i = 0; i < 5; i++) {
+  //bloco de código
+}
+```
+
+Foreach (para percorrer uma lista)
+```java
+for(String item : lista) {
+    //bloco de código
+}
+```
 
 ## 2) Orientação a objetos
 
