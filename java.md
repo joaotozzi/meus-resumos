@@ -3,9 +3,9 @@
 Extensão do arquivo: .java
 
 IDEs:
-* Eclipse
-* IntelliJ IDEA
-* NetBeans
+- Eclipse
+- IntelliJ IDEA
+- NetBeans
 
 ## 1) Sintaxe básica
 
