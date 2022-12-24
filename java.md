@@ -61,6 +61,10 @@ int valor = (int) 3.14;
 ```
 A conversão de valores para uma variável maior é feita implicitamente
 
+### Constantes (modificador "final")
+```java
+final int constante = 42;
+```
 
 ### Array
 O tamanho de um array é fixo, não pode ser alterado.
