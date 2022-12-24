@@ -163,6 +163,24 @@ Instanciando um objeto da classe
 Conta conta = new Conta();
 ```
 
+Modificadores de acesso:
+- public: acessível em qualquer lugar
+- protected: acessível às classes do mesmo pacote e através de herança
+- default (sem modificador explícito): acessível apenas para classes do mesmo pacote
+- private: acessível apenas pela própria classe
+
+Atributo de classe (static)
+```java
+class Carro{
+    public static int numeroDeCarros;
+    
+    ...
+}
+
+//o atributo ou método pode ser acessado diretamente da definição da classe
+System.out.println(Carro.numeroDeCarros);
+```
+
 ### Herança
 ```java
 public class Gerente extends Funcionario{
@@ -180,14 +198,54 @@ public class Gerente extends Funcionario{
 }
 ```
 ### Classe abstrata
+Uma classe que não pode ser instanciada (serve para definir métodos e atributos que são herdados por outras classes)
+
+Uma classe abstrata pode possuir métodos "concretos"
+
+Método abstrato: Um método que obrigatóriamente precisa ser implentado pela classe filha
+
 ```java
+public abstract class ClasseAbstrata {
+ 	
+	//um método abstrato exige que a classe seja abstrata
+      public abstract void metodoAbstrato();
+
+	//outros métodos e atributos
+}
 ```
 ### Classe anônima
+Permite a declaração e a instanciação de uma classe em uma única expressão. A classe não possui nome.
+
+Indicada para quando for necessário usar uma classe local apenas uma vez.
 ```java
+//pode dar 'new' em uma classe ou interface
+Executavel acao = new Executavel() {
+    @Override
+    public void run() {
+        ...
+    }
+};
 ```
+
 ### Interface
+Possui apenas o "contrato" dos métodos que precisam ser implementados. O uso de interface ao invés de herança é amplamente aconselhado
 ```java
+public interface Autenticavel {
+    //contém apenas a definição do método
+    void autenticar(int variavel); 
+}
+
+//a classe precisa implementar o método definido da interface
+public class Usuario implements Autenticavel{
+	void autenticar (int variavel){
+	     //implementação do método
+      }
+}
 ```
+Todas as variáveis declaradas na interface precisam ser "public static final"
+
+No Java 8 é possível adicionar uma implementação padrão para o método de uma interface usando o modificador "default"
+
 ## 3) java.util
 
 List
