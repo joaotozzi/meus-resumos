@@ -176,7 +176,7 @@ class Carro{
     ...
 }
 
-//o atributo ou método pode ser acessado diretamente da definição da classe
+//pode ser acessado diretamente da definição da classe
 System.out.println(Carro.numeroDeCarros);
 ```
 
@@ -192,7 +192,7 @@ public class Gerente extends Funcionario{
     //indica que o método da classe pai foi sobrescrito
     @Override
     public void metodoExemplo (){
-        //...
+        ...
     }
 }
 ```
@@ -206,10 +206,9 @@ Método abstrato: Um método que obrigatóriamente precisa ser implentado pela c
 ```java
 public abstract class ClasseAbstrata {
  	
-	//um método abstrato exige que a classe seja abstrata
-      public abstract void metodoAbstrato();
-
-	//outros métodos e atributos
+    //um método abstrato exige que a classe seja abstrata
+    public abstract void metodoAbstrato();
+    ...
 }
 ```
 ### Classe anônima
@@ -248,6 +247,8 @@ No Java 8 é possível adicionar uma implementação padrão para o método de u
 ## 3) java.util
 
 List
+
+Set
 
 ## 4) Tratamento de exceções
 
