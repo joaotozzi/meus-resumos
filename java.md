@@ -137,16 +137,57 @@ for(String item : lista) {
 
 ## 2) Orientação a objetos
 
-Classe
+### Classe
+```java
+public class Conta{
+    //atributos
+    private double saldo;
+    private String titular;
+    
+    //construtor
+    public Conta(){
+       //...
+    }
+    
+    //métodos
+    public deposita(double valor){
+        this.saldo += valor;
+    }
+    
+    //métodos getters e setters
+}
+```
 
-Herança
+Instanciando um objeto da classe
+```java
+Conta conta = new Conta();
+```
 
-Classe abstrata
-
-Classe anônima
-
-Interface
-
+### Herança
+```java
+public class Gerente extends Funcionario{
+    
+    public Gerente (){
+        //chama o construtor da classe pai
+        super();
+    }
+    
+    //indica que o método da classe pai foi sobrescrito
+    @Override
+    public void metodoExemplo (){
+        //...
+    }
+}
+```
+### Classe abstrata
+```java
+```
+### Classe anônima
+```java
+```
+### Interface
+```java
+```
 ## 3) java.util
 
 List
