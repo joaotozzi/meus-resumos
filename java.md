@@ -169,11 +169,10 @@ Modificadores de acesso:
 - default (sem modificador explícito): acessível apenas para classes do mesmo pacote
 - private: acessível apenas pela própria classe
 
-Atributo de classe (static)
+### Atributo de classe (static)
 ```java
 class Carro{
     public static int numeroDeCarros;
-    
     ...
 }
 
