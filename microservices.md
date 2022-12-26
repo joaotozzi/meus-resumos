@@ -2,12 +2,12 @@
 
 Microsserviços = serviços indenpendentes
 
-Limitações de aplicações monolíticas:
+### Limitações de aplicações monolíticas
 * Demora no deploy
 * Falhas podem derrubar o sistema todo
 * Um projeto usa apenas uma tecnologia/linguagem
 
-Benefícios dos microsserviços:
+### Benefícios dos microsserviços
 * Facilita mudança/manutenção
 * Permite times menores e autônomos
 * Possibilita o reuso de serviços em outros projetos
@@ -15,7 +15,7 @@ Benefícios dos microsserviços:
 * Maior isolamento de falhas
 * Escalabilidade independente e flexível
 
-Desvantagens dos microsserviços:
+### Desvantagens dos microsserviços
 * Maior complexidade de desenvolvimento e infra
 * Debug é mais complexo
 * Comunicação entre serviços deve ser bem pensada para permitir monitoramento e ratreio de falhas
