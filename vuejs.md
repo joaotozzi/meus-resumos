@@ -52,9 +52,7 @@ Além de inserir a tag no template é necessário importar o componente e declar
   
   export default {
     name: 'App',
-    components: {
-       PrimeiroComponente
-    }
+    components: { PrimeiroComponente }
   }
 </script>
 ``` 
@@ -94,7 +92,7 @@ v-on - dispara uma função quando um determinado evento acontece (pode ser abre
 <a v-on:click="doSomething"> ... </a>
 ```
 
-## 5) Javascript so Componente
+## 5) Javascript no componente
 
 ### Options API
 variáveis são definidas dentro da função data.
