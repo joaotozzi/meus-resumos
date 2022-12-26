@@ -1,7 +1,7 @@
 # Meus Resumos
 Resumos de linguagens de programação e outras tecnologias
 
-## Front-End
+## Front-end
 [HTML 5](html5.md)
 
 CSS:
@@ -14,7 +14,7 @@ Javascript:
 * [Vue.js 3](vuejs.md)
 
 
-## Linguagem de programação
+## Back-end
 Java:
 * [Java](java.md)
 * Maven
