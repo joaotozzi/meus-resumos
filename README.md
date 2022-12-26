@@ -2,36 +2,55 @@
 Resumos de linguagens de programação e outras tecnologias
 
 ## Front-End
-* [HTML 5](html5.md)
+[HTML 5](html5.md)
+
+CSS:
 * CSS
 * Sass
-* Bootstrap - Framework CSS
+* Bootstrap
+
+Javascript:
 * Javascript
-* [Vue.js 3 - Framework Javascript](vuejs.md)
+* [Vue.js 3](vuejs.md)
 
 
 ## Linguagem de programação
+Java:
 * [Java](java.md)
-* [Spring Boot - Framework Java](spring_boot.md)
-* [Spring Cloud - Ferramentas para sistemas distribuídos](spring_cloud.md)
-* [Kotlin](kotlin.md)
-* Python
-* Go
+* Maven
+* [Spring Boot](spring_boot.md)
+* [Spring Cloud](spring_cloud.md)
+
+[Kotlin](kotlin.md)
+
+Python
+
+Go
 
 ## Mobile
-* [Programação Android com Kotlin](android_kotlin.md)
+[Programação Android com Kotlin](android_kotlin.md)
 
 ## Banco de Dados
-* SQL
+SQL
 
 ## Infraestrutura
-* Git
-* Linux
-* Docker
-* Jenkins
+Git
+
+Linux
+
+HTTP
+
+Docker
+
+Jenkins
 
 ## Padrões, arquitetura e boas práticas
-* REST
-* TDD
-* Design Patterns
-* [Microsserviços](microservices.md)
+REST
+
+TDD
+
+SOLID
+
+Design Patterns
+
+[Microsserviços](microservices.md)
