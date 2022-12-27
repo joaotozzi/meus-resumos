@@ -46,7 +46,7 @@ Package by Feature: Cada pacote possui todas as classes necessárias para a func
 ```
 
 
-## 5) Banco de dados (Model)
+## 2) Banco de dados (Model)
 
 Propriedades de configuração necessárias no arquivo application.properties (banco MySQL)
 ```
@@ -197,7 +197,7 @@ public ResponseEntity<PagamentoDto> detalhar(@PathVariable @NotNull Long id) {
 
 POST - Criar um recurso:
 
-Quando o endpoint retorna um código 201(created) deve ser devolvida a URI do recurso que acabou de ser criado. Isso é feito com o uso do objeto uriBuilder.
+Quando o endpoint retorna um código 201(created) deve ser devolvida a URI do recurso que acabou de ser criado. Isso é feito com o uso do UriComponentsBuilder.
 ```java
 @PostMapping
 public ResponseEntity<PagamentoDto> cadastrar(@RequestBody @Valid PagamentoDto dto, UriComponentsBuilder uriBuilder) {
@@ -265,10 +265,10 @@ public ResponseEntity<UsuarioRespostaDTO> salvar(@RequestBody UsuarioDTO usuario
 
 A conversão DTO -> Entidade deve ser feita em uma classe separada mapper ou converter.
 
-### Injeção de Dependências
-Padrão de projeto que ajuda deixar o código com baixo acoplamento. O frameworrk fica responsável por por injetar os objetos necessários
+### Injeção de dependências
+Padrão de projeto que ajuda deixar o código com baixo acoplamento. O frameworrk fica responsável por injetar os objetos necessários
 
-Injeção de dependência com @Autowired
+Injeção de dependência com @Autowired:
 ```java
 @Autowired
 private PagamentoService service;
@@ -277,15 +277,16 @@ private PagamentoService service;
 Injeção no construtor (não necessita da anotação @Autowired a partir do Spring 4.3):
 ```java
 public class PagamentoController{
-    private final PagamentoService pagamentoService;
+    
+    private final PagamentoService service;
 
-    public PagamentoController(PagamentoService pagamentoService) {
-        this.pagamentoService = pagamentoService;
+    public PagamentoController(PagamentoService service) {
+        this.service = service;
     }
 }
 ```
 
-## 7) Camada Service
+## 4) Service
 
 Classes usadas para que as regras de manipulação não fiquem no controller. Recebem a anotação @Service
 
@@ -361,12 +362,9 @@ Converter DTO -> Entity:
 modelMapper.map(dto, Pagamento.class);
 ```
 
+## 5) Variáveis de ambiente
 
-
-
-## 8) Arquivo application.properties
-
-Apontando para uma variável de ambiente (externa ao código) e definindo um valor default
+Apontando para uma variável de ambiente (externa ao código) e definindo um valor default:
 ```java
 server.port=${PORT:8080}
 ```
