@@ -155,7 +155,7 @@ Cada alteração do banco deve ser feita em um novo arquivo (nunca editar um scr
 
 É criada uma tabela flyway_schema_history contendo o histórico de todos os scripts executados, para que o flyway não execute novamentes os scripts antigos a cada novo deploy 
 
-## 3) Controller Rest
+## 3) Controller
 
 ### Anotações da classe controller
 
@@ -176,6 +176,8 @@ public class PagamentoController {
 A implentação das regras de negócio fica nos métodos na camada Service
 
 GET - Listar recursos com paginação:
+
+A anotação @PageableDefault injeta um objeto Pageable no método controller, permitindo a paginação automática do resultado
 ```java
 @GetMapping
 public Page<PagamentoDto> listar(@PageableDefault(size = 10) Pageable paginacao) {
@@ -194,6 +196,8 @@ public ResponseEntity<PagamentoDto> detalhar(@PathVariable @NotNull Long id) {
 ```
 
 POST - Criar um recurso:
+
+Quando o endpoint retorna um código 201(created) deve ser devolvida a URI do recurso que acabou de ser criado. Isso é feito com o uso do objeto uriBuilder.
 ```java
 @PostMapping
 public ResponseEntity<PagamentoDto> cadastrar(@RequestBody @Valid PagamentoDto dto, UriComponentsBuilder uriBuilder) {
@@ -227,13 +231,12 @@ Outra opção de anotação para os métodos:
 @RequestMapping(value = "/{id}", method = RequestMethod.GET)
 ```
 
-Anotações para acessar valores recebidos na requisição:
+### Anotações para acessar valores recebidos na requisição
 - @PathVariable - acessa o valor passaddo na URL
-- @RequestBody - acessa o body enviado na requisição
+- @RequestBody - acessa o body enviado na requisição.
 - @RequestParam - acessa o valor passado como parâmetro na requisição (após o "?" da URL)
 
-
-## 3) Response Entity
+### Response Entity
 Objeto que representa o response HTTP completo (status code, headers e o body) que é retornado na requisição.
 
 ```java
@@ -249,7 +252,7 @@ return ResponseEntity.notFound().build();
 ```
 
 
-## 4) Padrão Data Transfer Object (DTO)
+### Padrão Data Transfer Object (DTO)
 Padrão arquitetural introduzido por Martin Fowler (livro EAA). Uma classe que representa os dados recebidos/enviados pela api, para desacoplar da entidade que representa a tabela do banco de dados.
 
 ```java
@@ -262,56 +265,22 @@ public ResponseEntity<UsuarioRespostaDTO> salvar(@RequestBody UsuarioDTO usuario
 
 A conversão DTO -> Entidade deve ser feita em uma classe separada mapper ou converter.
 
-Converter uma lista de objetos em uma lista de DTOs:
+### Injeção de Dependências
+Padrão de projeto que ajuda deixar o código com baixo acoplamento. O frameworrk fica responsável por por injetar os objetos necessários
+
+Injeção de dependência com @Autowired
 ```java
-return usuarios.stream().map(mapper::toDto).collect(toList());
-``` 
-### ModelMapper
-
-A conversão automática entre DTO e entidade pode ser feita com a dependência ModelMapper
-
-Os nomes dos atributos devem ser os mesmos nas duas classes
-
-É necessário indicar para o Spring que o modelMapper é um bean, para poder injetá-lo como dependência na classe service
-```java
-@Configuration
-public class Configuracao {
-
-    @Bean
-    public ModelMapper obterModelMapper() {
-        return new ModelMapper();
-    }
-}
-```
-
-Converter Entity -> DTO:
-```java
-modelMapper.map(pagamento, PagamentoDto.class);
-```
-
-Converter DTO -> Entity:
-```java
-modelMapper.map(dto, Pagamento.class);
-```
-
-
-## 6) Injeção de Dependências @Autowired
-Muito usado para injetar interfaces repository e services
-
-```java
-public class RestController{
-    @Autowired
-    private CoffeeRepository coffeeRepository;
-}
+@Autowired
+private PagamentoService service;
 ```
 
 Injeção no construtor (não necessita da anotação @Autowired a partir do Spring 4.3):
 ```java
-public class RestController{
-    private final CoffeeRepository coffeeRepository;
+public class PagamentoController{
+    private final PagamentoService pagamentoService;
 
-    public RestController(CoffeeRepository coffeeRepository) {
-        this.coffeeRepository = coffeeRepository;
+    public PagamentoController(PagamentoService pagamentoService) {
+        this.pagamentoService = pagamentoService;
     }
 }
 ```
@@ -363,6 +332,37 @@ public class PagamentoService {
     }
 }
 ```
+
+### ModelMapper
+
+A conversão automática entre DTO e entidade pode ser feita com a dependência ModelMapper
+
+Os nomes dos atributos devem ser os mesmos nas duas classes
+
+É necessário indicar para o Spring que o modelMapper é um bean, para poder injetá-lo como dependência na classe service
+```java
+@Configuration
+public class Configuracao {
+
+    @Bean
+    public ModelMapper obterModelMapper() {
+        return new ModelMapper();
+    }
+}
+```
+
+Converter Entity -> DTO:
+```java
+modelMapper.map(pagamento, PagamentoDto.class);
+```
+
+Converter DTO -> Entity:
+```java
+modelMapper.map(dto, Pagamento.class);
+```
+
+
+
 
 ## 8) Arquivo application.properties
 
