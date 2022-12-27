@@ -197,7 +197,7 @@ public ResponseEntity<PagamentoDto> detalhar(@PathVariable @NotNull Long id) {
 
 POST - Criar um recurso:
 
-Quando o endpoint retorna um código 201(created) deve ser devolvida a URI do recurso que acabou de ser criado. Isso é feito com o uso do UriComponentsBuilder.
+Quando o endpoint retorna um código 201 (created) deve ser devolvida a URI do recurso que acabou de ser criado. Isso é feito com o uso do UriComponentsBuilder.
 ```java
 @PostMapping
 public ResponseEntity<PagamentoDto> cadastrar(@RequestBody @Valid PagamentoDto dto, UriComponentsBuilder uriBuilder) {
@@ -364,7 +364,7 @@ modelMapper.map(dto, Pagamento.class);
 
 ## 5) Variáveis de ambiente
 
-Apontando para uma variável de ambiente (externa ao código) e definindo um valor default:
+Apontando no arquivo application.properties uma variável de ambiente chamada "PORT" (externa ao código) e definindo um valor default:
 ```java
 server.port=${PORT:8080}
 ```
