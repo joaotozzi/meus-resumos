@@ -1,21 +1,48 @@
 # Spring Boot
 
-Spring initializr (https://start.spring.io/)
+Uma ferramenta para criação facilitada de aplicações Java que utilizam o framework Spring.
 
-Dependências: 
+[Spring initializr](https://start.spring.io/): Ferramenta web para a geração de projetos spring boot
+
+Dependências comuns: 
 - Spring Web
 - Spring Data JPA
 - Driver do Banco de Dados (MySQL, Oracle...)
-- Spring Boot Devtools: permite restart automático da aplicação durante o desenvolvimento
-- Lombok: para não ser necessário escrever getters, setters e construtores
+- Spring Boot Devtools (ferramentas de desenvolvedor)
+- Lombok (getters, setters e construtores automáticos)
 - Validation
-- Flyway Migration: para controlar os scripts de migração de banco de dados
+- Flyway Migration (controle de scripts de migração de banco de dados)
 
-## 1) Formas de organização do código
-Por recurso: Um pacote para cada funcionalidade. Inclui as classes controller, DTO e repository no mesmo pacote.
+## 1) Métodos de modularização
+Package by Layer: As classes são colocadas no pacote da camada arquitetônica a que pertencem.
 
-Por camada (Package by Layer): Agrupa models, controllers e DTOs em pacotes específicos.
+── br.com.nomedaempresa.nomedoprojeto
+    └── controller
+        ├── PagamentoController
+        └── PedidoController
+    └── model
+        ├── Pagamento   
+        └── Pedido
+    └── repository
+        ├── PagamentoRepository   
+        └── PedidoRepository
+    └── service
+        ├── PagamentoService
+        └── PedidoService
 
+Package by Feature: Cada pacote possui todas as classes necessárias para a funcionalidade
+
+├── br.com.nomedaempresa.nomedoprojeto
+    └── pagamento
+        ├── Pagamento
+        ├── PagamentoController
+        ├── PagamentoRepository        
+        └── PagamentoService
+    └── pedido
+        ├── Pedido   
+        ├── PedidoController
+        ├── PedidoRepository
+        └── PedidoService
 
 ## 2) Controller Rest
 
