@@ -15,7 +15,7 @@ Dependências comuns:
 
 ## 1) Métodos de modularização
 Package by Layer: As classes são colocadas no pacote da camada arquitetônica a que pertencem.
-
+```
 ── br.com.nomedaempresa.nomedoprojeto
     └── controller
         ├── PagamentoController
@@ -29,9 +29,9 @@ Package by Layer: As classes são colocadas no pacote da camada arquitetônica a
     └── service
         ├── PagamentoService
         └── PedidoService
-
+```
 Package by Feature: Cada pacote possui todas as classes necessárias para a funcionalidade
-
+```
 ├── br.com.nomedaempresa.nomedoprojeto
     └── pagamento
         ├── Pagamento
@@ -43,8 +43,119 @@ Package by Feature: Cada pacote possui todas as classes necessárias para a func
         ├── PedidoController
         ├── PedidoRepository
         └── PedidoService
+```
 
-## 2) Controller Rest
+
+## 5) Banco de dados (Model)
+
+Propriedades de configuração necessárias no arquivo application.properties (banco MySQL)
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/nomedobanco
+spring.datasource.username=<usuario>
+spring.datasource.password=<senha>
+```
+
+
+### Classe entidade (mapeia uma tabela do banco)
+
+```java
+@Entity
+@Table(name = "pagamentos")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Pagamento {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @Positive
+    private BigDecimal valor;
+
+    @NotBlank
+    @Size(max=100)
+    private String nome;
+
+    @NotBlank
+    @Size(max=19)
+    private String numero;
+
+    @NotBlank
+    @Size(max=7)
+    private String expiracao;
+
+    @NotBlank
+    @Size(min=3, max=3)
+    private String codigo;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @NotNull
+    private Long pedidoId;
+
+    @NotNull
+    private Long formaDePagamentoId;
+}
+```
+
+### Lombok
+
+Biblioteca java que usa anotações para gerar automaticamente métodos getters, setters e construtores
+- @Getter
+- @Setter
+- @AllArgsConstructor
+- @NoArgsConstructor
+
+### Bean Validation
+
+Especificação que permite validar objetos com base nas retrições adicionadas na classe de modelo (classe Entity)
+- @NotNull
+- @Positive
+- @NotBlank
+- @Size(min=3, max=3)
+
+Para usar essa validação basta anotar o parâmetro de um método com @Valid
+
+### Repository
+Interface que já possui vários métodos implementados que facilitam a criação de um CRUD básico 
+
+```java
+// informa <classe da entidade, tipo do id>
+public interface PagamentoRepositoy extends JpaRepository<Pagamento, Long> {
+
+}
+```
+
+Alguns métodos já existentes na interface repository:
+- coffeeRepository.findAll()
+- coffeeRepository.findById(id)
+- coffeeRepository.save(coffee)
+- coffeeRepository.deleteById(id)
+
+
+### Migrations (Flyway)
+
+Flyway é uma ferramenta para atualizar o banco de dados sem a necessidade de executar os scripts sql manualmente.
+
+Migrations: Histórico de tudo que aconteceu na base de dados
+
+Os scripts devem ficar na pasta resources/db.migration
+
+Padrão de nomeclatura dos scripts:
+
+V{numero}__{nome_do_comando}.sql
+
+Ex.: V1__criar_tabela_pagamentos.sql
+
+Cada alteração do banco deve ser feita em um novo arquivo (nunca editar um script já existente)
+
+É criada uma tabela flyway_schema_history contendo o histórico de todos os scripts executados, para que o flyway não execute novamentes os scripts antigos a cada novo deploy 
+
+## 3) Controller Rest
 
 ### Anotações da classe controller
 
@@ -113,7 +224,7 @@ public ResponseEntity<PagamentoDto> remover(@PathVariable @NotNull Long id) {
 
 Outra opção de anotação para os métodos:
 ```java
-@RequestMapping(value = "/pagamentos", method = RequestMethod.GET)
+@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 ```
 
 Anotações para acessar valores recebidos na requisição:
@@ -182,94 +293,6 @@ Converter DTO -> Entity:
 ```java
 modelMapper.map(dto, Pagamento.class);
 ```
-
-## 5) Banco de dados
-
-Propriedades necessárias no arquivo application.properties (banco MySQL)
-```
-spring.datasource.url=jdbc:mysql://localhost:3306/nomedobanco
-spring.datasource.username=<usuario>
-spring.datasource.password=<senha>
-```
-
-
-### Classe entidade (mapeia uma tabela do banco)
-
-```java
-@Entity
-@Table(name = "pagamentos")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Pagamento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull
-    @Positive
-    private BigDecimal valor;
-
-    @NotBlank
-    @Size(max=100)
-    private String nome;
-
-    @NotBlank
-    @Size(max=19)
-    private String numero;
-
-    @NotBlank
-    @Size(max=7)
-    private String expiracao;
-
-    @NotBlank
-    @Size(min=3, max=3)
-    private String codigo;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
-    @NotNull
-    private Long pedidoId;
-
-    @NotNull
-    private Long formaDePagamentoId;
-}
-```
-
-### Repository
-Interface que já vem com vários métodos implementados que facilitam a criação do CRUD básico 
-
-<classe da entidade, tipo do id>
-
-```java
-public interface PagamentoRepositoy extends JpaRepository<Pagamento, Long> {}
-```
-
-Alguns métodos já existentes na interface repository:
-- coffeeRepository.findAll()
-- coffeeRepository.findById(id)
-- coffeeRepository.save(coffee)
-- coffeeRepository.deleteById(id)
-
-
-### Migrations (Flyway)
-
-Flyway é uma ferramenta para atualizar o banco de dados sem a necessidade de executar os scripts sql manualmente.
-
-Migrations: Histórico de tudo que aconteceu na base de dados
-
-Os scripts devem ficar na pasta resources/db.migration
-
-Padrão de nomeclatura dos scripts:
-V{numero}__{nome_do_comando}.sql
-Ex.: V1__criar_tabela_pagamentos.sql
-
-Cada alteração do banco deve ser feita em um novo arquivo (nunca editar um script já existente)
-
-É criada uma tabela flyway_schema_history contendo o histórico de todos os scripts executados, para que o flyway não execute novamentes os scripts antigos a cada novo deploy 
 
 
 ## 6) Injeção de Dependências @Autowired
